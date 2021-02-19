@@ -36,6 +36,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 public class FastScrollRecyclerView extends RecyclerView implements RecyclerView.OnItemTouchListener {
 
@@ -267,6 +268,10 @@ public class FastScrollRecyclerView extends RecyclerView implements RecyclerView
             spanCount = ((GridLayoutManager) getLayoutManager()).getSpanCount();
             rowCount = (int) Math.ceil((double) rowCount / spanCount);
         }
+        if (getLayoutManager() instanceof StaggeredGridLayoutManager) {
+            spanCount = ((StaggeredGridLayoutManager) getLayoutManager()).getSpanCount();
+            rowCount = (int) Math.ceil((double) rowCount / spanCount);
+        }
 
         // Stop the scroller if it is scrolling
         stopScroll();
@@ -299,8 +304,13 @@ public class FastScrollRecyclerView extends RecyclerView implements RecyclerView
             scrollOffset = -(exactItemPos % mScrollPosState.rowHeight);
         }
 
-        LinearLayoutManager layoutManager = ((LinearLayoutManager) getLayoutManager());
-        layoutManager.scrollToPositionWithOffset(scrollPosition, scrollOffset);
+        LayoutManager layoutManager = getLayoutManager();
+
+        if (layoutManager instanceof LinearLayoutManager) {
+            ((LinearLayoutManager) layoutManager).scrollToPositionWithOffset(scrollPosition, scrollOffset);
+        } else if (layoutManager instanceof StaggeredGridLayoutManager) {
+            ((StaggeredGridLayoutManager) layoutManager).scrollToPositionWithOffset(scrollPosition, scrollOffset);
+        }
 
         if (!(getAdapter() instanceof SectionedAdapter)) {
             return "";
@@ -401,6 +411,9 @@ public class FastScrollRecyclerView extends RecyclerView implements RecyclerView
     protected boolean isLayoutManagerReversed() {
         if (getLayoutManager() instanceof LinearLayoutManager) {
             return ((LinearLayoutManager) getLayoutManager()).getReverseLayout();
+        }
+        if (getLayoutManager() instanceof StaggeredGridLayoutManager) {
+            return ((StaggeredGridLayoutManager) getLayoutManager()).getReverseLayout();
         }
         return false;
     }
