@@ -22,7 +22,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
 
     // AppCompat
-    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
 }
 
 //To deploy, re-comment following line & run ./gradlew clean assembleRelease install bintrayUpload
