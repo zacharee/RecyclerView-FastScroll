@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
 
 group = "recyclerview-fastscroll"
-version = "1.0"
 
 android {
     compileSdkVersion 30
@@ -33,5 +33,19 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
 }
 
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+
+                groupId = 'recyclerview-fastscroll'
+                artifactId = 'final'
+                version = '1.0'
+            }
+        }
+    }
+}
+
 //To deploy, re-comment following line & run ./gradlew clean assembleRelease install bintrayUpload
-apply from : 'deploy.gradle'
+//apply from : 'deploy.gradle'
